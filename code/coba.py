@@ -1,88 +1,86 @@
-import build_dataset
+
+import mido
+from mido import MidiFile, MidiTrack, Message
+from keras.layers import LSTM, Dense, Activation, Dropout, Flatten
+from keras.preprocessing import sequence
+from keras.models import Sequential
+from keras.optimizers import Adam
+from keras.callbacks import ModelCheckpoint
+from sklearn.preprocessing import MinMaxScaler
 import numpy as np
-import pandas as pd
-from __init__ import *
-import matplotlib.pyplot as plt
-import warnings
-warnings.simplefilter(action='ignore')
+
+mid = MidiFile('Sewukuto.mid')
+mid2 = MidiFile('balinese.midi')
+mid3 = MidiFile('Samples/Nintendo_-_Pokemon_Fire_Red_Route_1_Piano_Cover_Hard_Version.mid')
+mid4 = MidiFile('Nintendo_-_Dr._Mario.mid')
+print mid
+print mid2
+print mid3
+print mid4
+mid = mid4
+notes = []
+for msg in mid:
+    if not msg.is_meta and msg.channel == 0 and msg.type == 'note_on':
+        data = msg.bytes()
+        notes.append(data[1])
 
 
-def visualization(name, classifier_result_name, classifier_result_acc):
-    plt.cla()
-    plt.clf()
-    acc = pd.Series.from_array(classifier_result_acc)
-    plt.figure()
-    max_acc = max(classifier_result_acc)
-    ax = acc.plot(kind='bar', edgecolor='black', width=1.0, color=['red' if row == max_acc else "orange" for row in classifier_result_acc])
-    # ax.set_title(name)
-    ax.set_ylabel('Accuracy')
-    ax.set_yticks(np.arange(0.0, 110.0, 10.0))
-    ax.set_xticklabels(classifier_result_name, rotation=360)
-    labels = ['%.2f' % elem for elem in classifier_result_acc]
-    boxes = ax.patches
-    for box, label in zip(boxes, labels):
-        height = box.get_height()
-        ax.text(box.get_x() + box.get_width() / 2, height + 0.1, label, ha='center', va='bottom')
-    plt.xlim(-0.75, 6)
-    figure_path = os.path.join(result_location, name+".png")
-    plt.savefig(figure_path, format="png")
+scaler = MinMaxScaler(feature_range=(0,1))
+scaler.fit(np.array(notes).reshape(-1,1))
+notes = list(scaler.transform(np.array(notes).reshape(-1,1)))
 
-def main():
-    """
-    Execute generic classification methods on DNA methylation data
-    """
-    logger.info("We work on "+attribute+" classification")
-    classifier_result_name = []
-    classifier_result_acc = []
+# LSTM layers requires that data must have a certain shape
+# create list of lists fist
+notes = [list(note) for note in notes]
 
-    classifier_result_name.append("L1")
-    classifier_result_acc.append(76.36)
-    classifier_result_name.append("L2")
-    classifier_result_acc.append(74.55)
-    visualization("LR", classifier_result_name, classifier_result_acc)
-    #
-    classifier_result_name.clear()
-    classifier_result_acc.clear()
-    classifier_result_name.append("k=2")
-    classifier_result_acc.append(64.24)
-    classifier_result_name.append("k=3")
-    classifier_result_acc.append(68.48)
-    classifier_result_name.append("k=4")
-    classifier_result_acc.append(66.06)
-    classifier_result_name.append("k=5")
-    classifier_result_acc.append(64.85)
-    visualization("KNN", classifier_result_name, classifier_result_acc)
-    #
-    classifier_result_name.clear()
-    classifier_result_acc.clear()
-    classifier_result_name.append("Linear")
-    classifier_result_acc.append(76.97)
-    classifier_result_name.append("RBF")
-    classifier_result_acc.append(61.21)
-    classifier_result_name.append("Poly 2")
-    classifier_result_acc.append(61.21)
-    classifier_result_name.append("Poly 3")
-    classifier_result_acc.append(61.21)
-    classifier_result_name.append("Poly 4")
-    classifier_result_acc.append(61.21)
-    visualization("SVM", classifier_result_name, classifier_result_acc)
+# subsample data for training and prediction
+X = []
+y = []
+# number of notes in a batch
+n_prev = 30
+for i in range(len(notes)-n_prev):
+    X.append(notes[i:i+n_prev])
+    y.append(notes[i+n_prev])
+# save a seed to do prediction later
+X_test = X[-300:]
+X = X[:-300]
+y = y[:-300]
 
-    classifier_result_name.clear()
-    classifier_result_acc.clear()
-    classifier_result_name.append("Sigmoid-1")
-    classifier_result_acc.append(72.12)
-    classifier_result_name.append("Sigmoid-2")
-    classifier_result_acc.append(73.33)
-    classifier_result_name.append("Tanh-1")
-    classifier_result_acc.append(76.36)
-    classifier_result_name.append("Tanh-2")
-    classifier_result_acc.append(76.97)
-    classifier_result_name.append("ReLU-1")
-    classifier_result_acc.append(70.91)
-    classifier_result_name.append("ReLU-2")
-    classifier_result_acc.append(76.36)
-    visualization("MLP", classifier_result_name, classifier_result_acc)
+model = Sequential()
+model.add(LSTM(256, input_shape=(n_prev, 1), return_sequences=True))
+model.add(Dropout(0.6))
+model.add(LSTM(128, input_shape=(n_prev, 1), return_sequences=True))
+model.add(Dropout(0.6))
+model.add(LSTM(64, input_shape=(n_prev, 1), return_sequences=False))
+model.add(Dropout(0.6))
+model.add(Dense(1))
+model.add(Activation('linear'))
+optimizer = Adam(lr=0.001)
+model.compile(loss='mse', optimizer=optimizer)
+filepath="./Checkpoints/checkpoint_model_{epoch:02d}.hdf5"
+model_save_callback = ModelCheckpoint(filepath, monitor='val_acc',
+                                      verbose=1, save_best_only=False,
+                                      mode='auto', period=5)
+
+model.fit(np.array(X), np.array(y), 32, 2, verbose=1, callbacks=[model_save_callback])
+
+prediction = model.predict(np.array(X_test))
+prediction = np.squeeze(prediction)
+prediction = np.squeeze(scaler.inverse_transform(prediction.reshape(-1,1)))
+prediction = [int(i) for i in prediction]
 
 
-if __name__ == '__main__':
-    main()
+mid = MidiFile()
+track = MidiTrack()
+t = 0
+for note in prediction:
+    # 147 means note_on
+    # 67 is velosity
+    note = np.asarray([147, note, 67])
+    bytes = note.astype(int)
+    msg = Message.from_bytes(bytes[0:3])
+    t += 1
+    msg.time = t
+    track.append(msg)
+mid.tracks.append(track)
+mid.save('LSTM_music.midi')
