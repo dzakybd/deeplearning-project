@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6840 64-bit) (preloaded format=pdflatex 2018.10.16)  4 DEC 2018 12:45
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6840 64-bit) (preloaded format=pdflatex 2018.10.16)  26 MAR 2019 13:14
 entering extended mode
 **./project.tex
 (project.tex
@@ -665,6 +665,10 @@ Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
 (Font)              scaled to size 17.28pt on input line 23.
+LaTeX Font Info:    Font shape `T1/ntxtlf/bx/n' in size <17.28> not available
+(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 23.
+LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
+(Font)              scaled to size 17.28pt on input line 23.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
 (Font)              scaled to size 12.0pt on input line 23.
 LaTeX Font Info:    Try loading font information for OT1+ntxtlf on input line 2
@@ -729,65 +733,68 @@ LaTeX Font Info:    Font shape `T1/ntxtlf/m/it' will be
 [1
 
 {C:/Users/HANSUNG/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
-<data_split.jpg, id=10, 493.0922pt x 162.6075pt>
-File: data_split.jpg Graphic file (type jpg)
-<use data_split.jpg>
-Package pdftex.def Info: data_split.jpg  used on input line 72.
-(pdftex.def)             Requested size: 198.5291pt x 65.4686pt.
-
-[2 <./system_design.png> <./data_split.jpg>]
-<LR.png, id=16, 169.1118pt x 291.2481pt>
+<LR.png, id=10, 169.1118pt x 291.2481pt>
 File: LR.png Graphic file (type png)
 <use LR.png>
-Package pdftex.def Info: LR.png  used on input line 101.
+Package pdftex.def Info: LR.png  used on input line 86.
 (pdftex.def)             Requested size: 97.87604pt x 168.56403pt.
-<KNN.png, id=17, 275.3487pt x 294.1389pt>
+<KNN.png, id=11, 275.3487pt x 294.1389pt>
 File: KNN.png Graphic file (type png)
 <use KNN.png>
-Package pdftex.def Info: KNN.png  used on input line 107.
+Package pdftex.def Info: KNN.png  used on input line 92.
 (pdftex.def)             Requested size: 159.04951pt x 169.905pt.
-<SVM.png, id=18, 330.9966pt x 291.9708pt>
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<SVM.png, id=12, 330.9966pt x 291.9708pt>
 File: SVM.png Graphic file (type png)
 <use SVM.png>
-Package pdftex.def Info: SVM.png  used on input line 117.
+Package pdftex.def Info: SVM.png  used on input line 102.
 (pdftex.def)             Requested size: 195.75583pt x 172.68005pt.
-<MLP.png, id=19, 380.1402pt x 293.4162pt>
+<MLP.png, id=13, 380.1402pt x 293.4162pt>
 File: MLP.png Graphic file (type png)
 <use MLP.png>
-Package pdftex.def Info: MLP.png  used on input line 123.
+Package pdftex.def Info: MLP.png  used on input line 108.
 (pdftex.def)             Requested size: 225.1179pt x 173.76324pt.
 
-Overfull \hbox (38.09721pt too wide) in paragraph at lines 133--134
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[2 <./system_design.png>]
+Overfull \hbox (38.09721pt too wide) in paragraph at lines 131--132
 []\T1/ntxtlf/m/n/10 Genome.ifmo.ru. (2018). TCGA PRAD Dataset. [on-line] Avail-
 able at: \T1/ntxtlf/m/it/10 https://genome.ifmo.ru/files/software/phantasus/tcg
 a/PRAD/
  []
 
 
-Underfull \hbox (badness 5533) in paragraph at lines 135--136
+Underfull \hbox (badness 5533) in paragraph at lines 133--134
 []\T1/ntxtlf/m/n/10 Civicdb.org. (2018). CIViC - Clin-i-cal In-ter-pre-ta-tions
  of Vari-ants in Can-cer. [on-line] Avail-able at:
  []
 
-[3 <./LR.png> <./KNN.png> <./SVM.png> <./MLP.png>] (project.aux) ) 
+[3 <./LR.png> <./KNN.png> <./SVM.png> <./MLP.png>] (project.aux)
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
 Here is how much of TeX's memory you used:
- 8071 strings out of 492970
- 114870 string characters out of 3135848
- 182580 words of memory out of 3000000
- 11809 multiletter control sequences out of 15000+200000
- 38133 words of font info for 48 fonts, out of 3000000 for 9000
+ 8067 strings out of 492970
+ 114808 string characters out of 3135848
+ 183580 words of memory out of 3000000
+ 11807 multiletter control sequences out of 15000+200000
+ 40933 words of font info for 49 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 53i,7n,92p,1081b,457s stack positions out of 5000i,500n,10000p,200000b,50000s
-{C:/Users/HAN
-SUNG/AppData/Roaming/MiKTeX/2.9/fonts/enc/dvips/newtx/ntx-ec-tlf.enc}{C:/Users/
-HANSUNG/AppData/Roaming/MiKTeX/2.9/fonts/enc/dvips/tex-gyre/q-ts1.enc}<C:/Users
-/HANSUNG/AppData/Roaming/MiKTeX/2.9/fonts/type1/public/tex-gyre/qtmb.pfb><C:/Us
-ers/HANSUNG/AppData/Roaming/MiKTeX/2.9/fonts/type1/public/tex-gyre/qtmr.pfb><C:
-/Users/HANSUNG/AppData/Roaming/MiKTeX/2.9/fonts/type1/public/tex-gyre/qtmri.pfb
->
-Output written on project.pdf (3 pages, 264584 bytes).
+ 53i,7n,92p,906b,414s stack positions out of 5000i,500n,10000p,200000b,50000s
+{C:/Users/HANSUNG/AppData/Roaming/MiKTeX/2.9/fonts/enc/dvips/newtx/ntx-ec-tlf
+.enc}{C:/Users/HANSUNG/AppData/Roaming/MiKTeX/2.9/fonts/enc/dvips/tex-gyre/q-ts
+1.enc}<C:/Users/HANSUNG/AppData/Roaming/MiKTeX/2.9/fonts/type1/public/tex-gyre/
+qtmb.pfb><C:/Users/HANSUNG/AppData/Roaming/MiKTeX/2.9/fonts/type1/public/tex-gy
+re/qtmr.pfb><C:/Users/HANSUNG/AppData/Roaming/MiKTeX/2.9/fonts/type1/public/tex
+-gyre/qtmri.pfb>
+Output written on project.pdf (3 pages, 237484 bytes).
 PDF statistics:
- 40 PDF objects out of 1000 (max. 8388607)
+ 39 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 31 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 26 words of extra memory for PDF output out of 10000 (max. 10000000)
 
