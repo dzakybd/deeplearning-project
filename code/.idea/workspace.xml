@@ -1,84 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="52ddf1f0-f720-4ff9-809a-2d30db42079d" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model/functions.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model/run.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model/weights_to_midi.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/music/jazz/-IsaacPiano.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/music/jazz/AndreandSchwandt-aLittleDream.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/music/jazz/Berckman-Berckman.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/music/jazz/CameronLeeSimpson-.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/music/jazz/CameronLeeSimpson-DabRag.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/music/jazz/CameronLeeSimpson-FamilyFoxtrot.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/music/jazz/CameronLeeSimpson-Fingers.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/music/jazz/CameronLeeSimpson-KnockerShuffle.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/music/jazz/CameronLeeSimpson-Man.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/music/jazz/CameronLeeSimpson-MarketRag.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/music/jazz/CameronLeeSimpson-Rag.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/music/jazz/CameronLeeSimpson-ToysRRag.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/music/jazz/EnsembleIsaacPianoWeek4withstructure-GeoDrumBpm.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/music/jazz/FreakinBullshitRankinBass-MADMADMONSTERPARTY.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/music/jazz/GiovanninoGiordo-Trabagliadori.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/music/jazz/JacobAllen-.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/music/jazz/MoabBerckmansdeOliveira-.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/music/jazz/Nightwish-LoveSlow.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/music/jazz/Nintendo-Mario.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/music/jazz/SaintGoMarchingI-SaintGoMarchingI.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/music/jazz/SimpsonAndBooker-TimeRag.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/music/jazz/VeggieTales-MeToVeggieTown.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/music/jazz/YamahaElectone1975s-theSaintsGoMarchingIn.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/music/jazz/michelpetruccianicaravansolo-petruccianicaravansolo.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/presentation/McMahon_AIJukebox_20180405.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/presentation/McMahon_AIJukebox_20180405.pptx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/presentation/~$McMahon_AIJukebox_20180405.pptx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scraping/download_midis_irishmidifiles.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scraping/download_midis_midiworld_classic.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scraping/download_midis_midiworld_jazz.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scraping/download_midis_midiworld_movie.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scraping/download_midis_midiworld_pop.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scraping/download_midis_tadpole.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trained copy/Celtic/Celtic_history_201804020451.pkl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trained copy/Celtic/Celtic_inputnotes_201804020451" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trained copy/Celtic/Celtic_weights_201804020451.hdf5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trained copy/Celtic/midi_Celtic-201804040839lstm_midi.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trained copy/Celtic/midi_Celtic-201804040839output_notes" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trained copy/Celtic/midi_Celtic-201804040841lstm_midi.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trained copy/Celtic/midi_Celtic-201804040841output_notes" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trained copy/Celtic/midi_Celtic_201804040843_lstm_midi.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trained copy/Celtic/midi_Celtic_201804040843_output_notes" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trained copy/Classical/201804041329-Classical-terminal.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trained copy/Classical/Classical_history_201804041329.pkl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trained copy/Classical/Classical_inputnotes_201804041329" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trained copy/Classical/Classical_midi_201804041329.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trained copy/Classical/Classical_outputnotes_201804041329" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trained copy/Classical/Classical_weights_201804041329.hdf5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trained copy/Dance/Dance_inputnotes_201803312153" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trained copy/Dance/Dance_inputnotes_201804051455" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trained copy/Dance/Dance_terminal_201804051455.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trained copy/Dance/Dance_weight_201804051455.hdf5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trained copy/Dance/Dance_weights_201803312153.hdf5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trained copy/FF/FF_inputnotes_201803282154" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trained copy/FF/FF_weights_201803282154.hdf5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trained copy/Jazz/Jazz_history_201804022150.pkl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trained copy/Jazz/Jazz_inputnotes_201804022150" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trained copy/Jazz/Jazz_weights_201804022150.hdf5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trained copy/Jazz/midi_Jazz_201804040850_lstm_midi.mid" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trained copy/Jazz/midi_Jazz_201804040850_output_notes" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Project.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Project.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LSTM_music2.mid" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Nintendo_-_Dr._Mario.mid" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sewukuto.mid" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build_dataset.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/classifiers.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/risk_prediction.py" beforeDir="false" />
-    </list>
+    <list default="true" id="52ddf1f0-f720-4ff9-809a-2d30db42079d" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,11 +15,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/model/run.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="112">
-              <caret line="39" column="90" selection-start-line="39" selection-start-column="73" selection-end-line="39" selection-end-column="90" />
+            <state relative-caret-position="277">
+              <caret line="50" column="49" selection-start-line="50" selection-start-column="49" selection-end-line="50" selection-end-column="49" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -113,11 +36,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/functions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-355">
-              <caret line="27" column="12" lean-forward="true" selection-start-line="27" selection-start-column="12" selection-end-line="27" selection-end-column="12" />
+            <state relative-caret-position="185">
+              <caret line="63" column="39" selection-start-line="63" selection-start-column="39" selection-end-line="63" selection-end-column="39" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -126,10 +49,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scraping/download_midis_midiworld_jazz.py">
+        <entry file="file://$PROJECT_DIR$/download_midis_midiworld_jazz.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="150">
-              <caret line="10" lean-forward="true" selection-start-line="9" selection-end-line="10" />
+              <caret line="10" selection-start-line="9" selection-end-line="10" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
               </folding>
@@ -176,8 +99,8 @@
       <find>terminal_output</find>
       <find>output/</find>
       <find>full_execution</find>
-      <find>convert_midis_to_notes</find>
       <find>midi_files</find>
+      <find>convert_midis_to_notes</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -246,11 +169,6 @@
               <item name="music" type="462c0819:PsiDirectoryNode" />
               <item name="jazz" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="code" type="b2602c69:ProjectViewProjectNode" />
-              <item name="code" type="462c0819:PsiDirectoryNode" />
-              <item name="scraping" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -265,8 +183,8 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/model" />
       <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/model" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -339,7 +257,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scraping/download_midis_midiworld_jazz.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/download_midis_midiworld_jazz.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -421,7 +339,7 @@
       <updated>1553432216336</updated>
       <workItem from="1553432219802" duration="2689000" />
       <workItem from="1553562964399" duration="357000" />
-      <workItem from="1553563356793" duration="2730000" />
+      <workItem from="1553563356793" duration="2966000" />
     </task>
     <task id="LOCAL-00001" summary="jj">
       <created>1553434824509</created>
@@ -430,22 +348,28 @@
       <option name="project" value="LOCAL" />
       <updated>1553434824509</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="jj">
+      <created>1553566399614</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1553566399614</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5776000" />
+    <option name="totallyTimeSpent" value="6012000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.28109854" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.28109854" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.39178082" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.39178082" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -586,10 +510,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scraping/download_midis_midiworld_jazz.py">
+    <entry file="file://$PROJECT_DIR$/download_midis_midiworld_jazz.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
-          <caret line="10" lean-forward="true" selection-start-line="9" selection-end-line="10" />
+          <caret line="10" selection-start-line="9" selection-end-line="10" />
           <folding>
             <element signature="e#0#29#0" expanded="true" />
           </folding>
@@ -603,22 +527,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model/run.py">
+    <entry file="file://$PROJECT_DIR$/model/functions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="112">
-          <caret line="39" column="90" selection-start-line="39" selection-start-column="73" selection-end-line="39" selection-end-column="90" />
+        <state relative-caret-position="185">
+          <caret line="63" column="39" selection-start-line="63" selection-start-column="39" selection-end-line="63" selection-end-column="39" />
           <folding>
-            <element signature="e#0#9#0" expanded="true" />
+            <element signature="e#0#10#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model/functions.py">
+    <entry file="file://$PROJECT_DIR$/model/run.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-355">
-          <caret line="27" column="12" lean-forward="true" selection-start-line="27" selection-start-column="12" selection-end-line="27" selection-end-column="12" />
+        <state relative-caret-position="277">
+          <caret line="50" column="49" selection-start-line="50" selection-start-column="49" selection-end-line="50" selection-end-column="49" />
           <folding>
-            <element signature="e#0#10#0" expanded="true" />
+            <element signature="e#0#9#0" expanded="true" />
           </folding>
         </state>
       </provider>
