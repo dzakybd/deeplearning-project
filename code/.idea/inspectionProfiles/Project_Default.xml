@@ -35,6 +35,7 @@
       <option name="ignoredIdentifiers">
         <list>
           <option value="functions" />
+          <option value="model.run.*" />
         </list>
       </option>
     </inspection_tool>
