@@ -1,8 +1,18 @@
 import re
 from datetime import datetime
 
-genre = "gamelan"
-midi_files = 'music/{}/*.mid'.format(genre)
+
+dataset_base = "../Dataset/"
+gamelan_dataset = dataset_base + "gamelan/"
+
+result_base = "../Result/"
+training_result = result_base + "training/"
+model_saved = training_result + 'model_saved.h5'
+note_file = training_result + 'gamelan-input_notes'
+history_file = training_result + 'gamelan-history.pkl'
+output_file = training_result + 'gamelan-output_notes'
+
+generated_music = result_base + "generated_music"
 
 timestamp = re.sub(r'[-: ]','',str(datetime.now()).split('.')[0])[:-2]
 output_name = midi_files.split('/')[-2]
@@ -13,10 +23,3 @@ notes_generated = 500
 temperature = 1.0
 offset_adj = 0.5
 
-subfolder = 'output/'
-output_tag = '{}{}-{}-'.format(subfolder, timestamp, output_name)
-
-weight_file = subfolder + '201903261638-gamelan--last_weights.hdf5'
-note_file = subfolder + '201903261638-gamelan-input_notes'
-history_file = subfolder + '201903261638-gamelan-history.pkl'
-output_file = subfolder + '201903261638-gamelan-output_notes'
