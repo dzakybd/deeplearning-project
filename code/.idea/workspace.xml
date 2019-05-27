@@ -2,25 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="52ddf1f0-f720-4ff9-809a-2d30db42079d" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/config.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generate_music.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Project.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Project.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.gitattributes" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/balinese.midi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/functions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/run.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/weights_to_midi.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/weights_to_midi.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trained copy/Jazz/Jazz_history_201804022150.pkl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trained copy/Jazz/Jazz_inputnotes_201804022150" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trained copy/Jazz/Jazz_weights_201804022150.hdf5" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trained copy/Jazz/midi_Jazz_201804040850_lstm_midi.mid" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trained copy/Jazz/midi_Jazz_201804040850_output_notes" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../report/McMahon_AIJukebox_20180405.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../report/McMahon_AIJukebox_20180405.pptx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../report/Term-project-report_dzaky-dion.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../report/proposal.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../report/KNN.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../report/LR.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../report/MLP.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../report/SVM.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../report/data_split.JPG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../report/project.aux" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../report/project.bbl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../report/project.blg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../report/project.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../report/project.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../report/project.synctex.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../report/project.tex" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../report/system_design.png" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -39,7 +35,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/run.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="418">
+            <state relative-caret-position="323">
               <caret line="22" column="41" selection-start-line="22" selection-start-column="27" selection-end-line="22" selection-end-column="41" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
@@ -51,7 +47,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/config.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="133">
+            <state relative-caret-position="114">
               <caret line="7" column="24" selection-start-line="7" selection-start-column="14" selection-end-line="7" selection-end-column="24" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
@@ -62,18 +58,14 @@
       </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/weights_to_midi.ipynb">
-          <provider selected="true" editor-type-id="ipnb-editor">
-            <state>
-              <selected id="2" />
-            </state>
-          </provider>
+          <provider selected="true" editor-type-id="jupyter-editor" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/functions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="372">
-              <caret line="156" column="28" lean-forward="true" selection-start-line="156" selection-start-column="28" selection-end-line="156" selection-end-column="28" />
+            <state relative-caret-position="315">
+              <caret line="153" column="16" selection-start-line="153" selection-start-column="16" selection-end-line="153" selection-end-column="16" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -84,7 +76,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/generate_music.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="304">
+            <state relative-caret-position="190">
               <caret line="16" column="30" selection-start-line="16" selection-start-column="30" selection-end-line="16" selection-end-column="30" />
               <folding>
                 <element signature="e#1#14#0" expanded="true" />
@@ -176,8 +168,9 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="953" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="847" />
+    <option name="y" value="-15" />
     <option name="width" value="974" />
     <option name="height" value="1047" />
   </component>
@@ -187,38 +180,11 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="code" type="b2602c69:ProjectViewProjectNode" />
-              <item name="code" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="code" type="b2602c69:ProjectViewProjectNode" />
-              <item name="code" type="462c0819:PsiDirectoryNode" />
-              <item name="music" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="code" type="b2602c69:ProjectViewProjectNode" />
-              <item name="code" type="462c0819:PsiDirectoryNode" />
-              <item name="music" type="462c0819:PsiDirectoryNode" />
-              <item name="jazz" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="code" type="b2602c69:ProjectViewProjectNode" />
-              <item name="code" type="462c0819:PsiDirectoryNode" />
-              <item name="output" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
       <pane id="Course" />
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
@@ -271,6 +237,9 @@
       <module name="Project" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -290,6 +259,9 @@
       <module name="Project" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -309,6 +281,9 @@
       <module name="Project" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -348,7 +323,10 @@
       <workItem from="1553567884753" duration="2773000" />
       <workItem from="1553571225270" duration="1390000" />
       <workItem from="1553577993656" duration="3483000" />
-      <workItem from="1553582515659" duration="9716000" />
+      <workItem from="1553582515659" duration="9804000" />
+      <workItem from="1557371000443" duration="56000" />
+      <workItem from="1557371264879" duration="94000" />
+      <workItem from="1557371740599" duration="594000" />
     </task>
     <task id="LOCAL-00001" summary="jj">
       <created>1553434824509</created>
@@ -364,14 +342,21 @@
       <option name="project" value="LOCAL" />
       <updated>1553566399614</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="jj">
+      <created>1553597744338</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1553597744339</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="23374000" />
+    <option name="totallyTimeSpent" value="24206000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="953" y="0" width="974" height="1047" extended-state="0" />
+    <frame x="-8" y="-8" width="2576" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.50547045" />
@@ -391,12 +376,12 @@
       <window_info anchor="bottom" id="Database Changes" order="11" />
       <window_info anchor="bottom" id="Terminal" order="12" weight="0.32827735" />
       <window_info anchor="bottom" id="Event Log" order="13" side_tool="true" />
-      <window_info anchor="right" x="0" y="0" width="434" height="856" id="Documentation" side_tool="true" weight="0.32995737" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="SciView" order="3" weight="0.32995737" />
       <window_info anchor="right" id="Database" order="4" />
+      <window_info anchor="right" x="0" y="0" width="434" height="856" id="Documentation" order="5" side_tool="true" weight="0.32995737" />
     </layout>
     <layout-to-restore>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23993559" />
@@ -481,28 +466,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/output/201903261618-gamelan-terminal.log">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/output/201903261630-gamelan-terminal.log">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/output/201903261635-gamelan-terminal.log">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/generate_music.py">
+    <entry file="file://$PROJECT_DIR$/output/201903261618-gamelan-terminal.log" />
+    <entry file="file://$PROJECT_DIR$/output/201903261630-gamelan-terminal.log" />
+    <entry file="file://$PROJECT_DIR$/output/201903261635-gamelan-terminal.log" />
+    <entry file="file://$PROJECT_DIR$/run.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
-          <caret line="16" column="30" selection-start-line="16" selection-start-column="30" selection-end-line="16" selection-end-column="30" />
+        <state relative-caret-position="323">
+          <caret line="22" column="41" selection-start-line="22" selection-start-column="27" selection-end-line="22" selection-end-column="41" />
           <folding>
-            <element signature="e#1#14#0" expanded="true" />
+            <element signature="e#0#10#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/config.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
+        <state relative-caret-position="114">
           <caret line="7" column="24" selection-start-line="7" selection-start-column="14" selection-end-line="7" selection-end-column="24" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
@@ -511,26 +490,22 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/weights_to_midi.ipynb">
-      <provider selected="true" editor-type-id="ipnb-editor">
-        <state>
-          <selected id="2" />
-        </state>
-      </provider>
+      <provider selected="true" editor-type-id="jupyter-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/run.py">
+    <entry file="file://$PROJECT_DIR$/generate_music.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="22" column="41" selection-start-line="22" selection-start-column="27" selection-end-line="22" selection-end-column="41" />
+        <state relative-caret-position="190">
+          <caret line="16" column="30" selection-start-line="16" selection-start-column="30" selection-end-line="16" selection-end-column="30" />
           <folding>
-            <element signature="e#0#10#0" expanded="true" />
+            <element signature="e#1#14#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/functions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="372">
-          <caret line="156" column="28" lean-forward="true" selection-start-line="156" selection-start-column="28" selection-end-line="156" selection-end-column="28" />
+        <state relative-caret-position="315">
+          <caret line="153" column="16" selection-start-line="153" selection-start-column="16" selection-end-line="153" selection-end-column="16" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
