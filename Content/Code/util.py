@@ -1,51 +1,72 @@
 import os
 import numpy as np
-from music21 import converter, note, chord, stream, instrument
+from music21 import converter, note, chord, instrument, tempo
 from keras.models import Sequential
 from keras.layers import Bidirectional, Dense, Dropout, CuDNNLSTM, Activation
 from keras.callbacks import CSVLogger
 from config import *
 import matplotlib.pyplot as plt
+from keras.utils import np_utils
 
 # Preprocessing #
+def train_preprocess():
+    # Convert MIDI to notes
+    if os.path.exists(notes_data):
+        notes = np.load(notes_data)
+    else:
+        notes = convert_midis_to_notes()
+
+    # Create sequences
+    train_x, train_y, n_patterns, n_vocab, pitchnames = create_sequences(notes)
+
+    # Data reshape
+    train_x = np.reshape(train_x, (len(train_x), sequence_length, 1))
+    train_y = np_utils.to_categorical(train_y)
+
+    information = [train_x, train_y, n_patterns, n_vocab, pitchnames]
+    np.save(preprocess_data, information)
+
+    return train_x, train_y, n_vocab
+
 
 # Convert midi file dataset to notes
 def convert_midis_to_notes():
     print("Convert MIDIs to notes")
     # list of notes and chords
     notes = []
-    note_count = 0
 
     # loading midi filepaths
     for file in os.listdir(midi_data):
         print(file)
-        try:
-            # midi type music21.stream.Score
-            midi = converter.parse(midi_data+file)
-            parts = instrument.partitionByInstrument(midi)
+        # midi type music21.stream.Score
+        midi = converter.parse(midi_data+file)
+        parts = instrument.partitionByInstrument(midi)
 
-            if parts:
-                notes_to_parse = parts.parts[0].recurse()
-            else:
-                notes_to_parse = midi.flat.notes
+        if parts:
+            notes_to_parse = parts.parts[0].recurse()
+        else:
+            notes_to_parse = midi.flat.notes
 
-            # notes_to_parse type music21.stream.iterator.RecursiveIterator
-            for e in notes_to_parse:
-                if isinstance(e, note.Note):
-                    notes.append(str(e.pitch))
-                elif isinstance(e, chord.Chord):
-                    to_append = '.'.join(str(n) for n in e.normalOrder)
-                    notes.append(to_append)
-            note_count += 1
-        except Exception as e:
-            print(e)
-            pass
-    assert note_count > 0
+        for e in notes_to_parse:
+            if isinstance(e, note.Note):
+                notes.append(str(e.pitch))
+            elif isinstance(e, chord.Chord):
+                to_append = '.'.join(str(n) for n in e.pitches)
+                notes.append(to_append)
+            elif isinstance(e, note.Rest):
+                notes.append(e.name)
+            # elif isinstance(e, tempo.MetronomeMark):
+            #     mark = str(e.text)+"|"+str(int(e.number))+"|"+str(int(e.referent.quarterLength))+"|"+e.referent.type
+            #     notes.append(mark)
+
     n_vocab = len(set(notes))
-    print("Loaded {} midi files {} notes and {} unique notes".format(note_count, len(notes), n_vocab))
-    np.save(notes_data, notes)
+
+    print("Total {} notes and {} unique notes".format(len(notes), n_vocab))
     print("Input notes/chords stored as {} then pickled at {}".format(type(notes), notes_data))
-    print("First 20 notes/chords: {}".format(notes[:20]))
+    print("notes/chords: {}".format(notes))
+
+    # Save notes
+    np.save(notes_data, notes)
 
     return notes
 
@@ -56,12 +77,15 @@ def load_sequences():
     n_patterns = information[2]
     n_vocab = information[3]
     pitchnames = information[4]
+
     return train_x, train_y, n_patterns, n_vocab, pitchnames
 
 def create_sequences(notes):
     print("\n**Preparing sequences for training**")
     pitchnames = sorted(set(i for i in notes)) # list of unique chords and notes
     n_vocab = len(pitchnames)
+
+    print('n_vocab', n_vocab)
     print("Pitchnames (unique notes/chords from 'notes') at length {}: {}".format(len(pitchnames), pitchnames))
     # enumerate pitchnames into dictionary embedding
     note_to_int = dict((note, number) for number, note in enumerate(pitchnames))
@@ -90,9 +114,6 @@ def create_sequences(notes):
     # print("Network input list item length: {}".format(len(train_x[0])))
     n_patterns = len(train_x) # notes less sequence length
     print("Lengths. N Vocab: {} N Patterns: {} Pitchnames: {}".format(n_vocab,n_patterns, len(pitchnames)))
-
-    information = [train_x, train_y, n_patterns, n_vocab, pitchnames]
-    np.save(preprocess_data, information)
 
     return train_x, train_y, n_patterns, n_vocab, pitchnames
 
@@ -132,6 +153,27 @@ def sample(preds, temperature=1.0):
     probas = np.random.multinomial(1, preds, 1)
     return np.argmax(probas)
 
+def generate_notes(model, train_x, n_vocab, pitchnames):
+    print("\n**Generating notes**")
+    # convert integers back to notes/chords
+    int_to_note = dict((number, note) for number, note in enumerate(pitchnames))
+    # randomly instantiate with single number from 0 to length of network input
+    start = np.random.randint(0, len(train_x) - 1)
+    pattern = train_x[start]
+    pattern = np.squeeze(pattern).tolist()
+    prediction_output = []
+    # generated notes (ie 500)
+    for note_index in range(sequence_length):
+        prediction_input = np.reshape(pattern, (1, len(pattern), 1)) / float(n_vocab)
+        prediction = model.predict(prediction_input, verbose=0)[0]
+        index = sample(prediction, temperature)
+        result = int_to_note[index]
+        prediction_output.append(result)
+        pattern.append(index)
+        pattern = pattern[1:len(pattern)]
+
+    return prediction_output
+
 def create_midi(prediction_output):
     print("\n**Creating midi**")
     offset = 0
@@ -155,16 +197,16 @@ def create_midi(prediction_output):
             new_note.storedInstrument = instrument.Xylophone()
 
             output_notes.append(new_note)
-        offset += offset_adj #0.5
+        offset += offset_adj
 
     return output_notes
-
 
 
 def callback_builder():
     callbacks_list = []
     callbacks_list.append(CSVLogger(loss_log, separator=','))
     return callbacks_list
+
 
 # fungsi untuk membuat plot akurasi dan loss tiap epoch
 def create_plot(hist):
