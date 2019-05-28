@@ -24,18 +24,44 @@ drop = 0.5
 
 # Fixed parameter #
 dataset_base = "../Dataset/"
-midi_data = dataset_base + "midi/"
-notes_data = dataset_base + 'notes.npy'
+midi_path = dataset_base + "midi/"
+notes_path = dataset_base + "notes/"
+
+
+def notes_data(instrument):
+    return notes_path + '{}.npy'.format(instrument)
 
 result_base = "../Result/"
 scenario_path = result_base + "scenario-{}/".format(scenario)
-preprocess_data = scenario_path + 'train/preprocess_data.npy'
-model_saved = scenario_path + 'train/model_saved.h5'
-model_plot = scenario_path + 'train/model_plot.png'
-loss_graph = scenario_path + 'train/loss_graph.png'
-loss_log = scenario_path + 'train/loss_log.csv'
-summary = scenario_path + 'train/summary.txt'
+preprocess_path = scenario_path + 'preprocess/'
+train_path = scenario_path + 'train/'
 
-generated_midi = scenario_path + "test/test_midi.mid"
-generated_notes = scenario_path + "test/test_notes.npy"
+
+def preprocess_data(instrument):
+    return preprocess_path + '{}.npy'.format(instrument)
+
+
+def train_instrument_path(instrument, usage=0):
+    path = train_path + '{}/'.format(instrument)
+    if usage == 1:
+        path = path + 'model_saved.h5'
+    elif usage == 2:
+        path = path + 'model_plot.png'
+    elif usage == 3:
+        path = path + 'loss_graph.png'
+    elif usage == 4:
+        path = path + 'loss_log.csv'
+    elif usage == 5:
+        path = path + 'summary.txt'
+    else:
+        return path
+    return path
+
+
+def generated_midi(instrument):
+    return scenario_path + "test/{}.mid".format(instrument)
+
+
+def generated_notes(instrument):
+    return scenario_path + "test/{}.npy".format(instrument)
 

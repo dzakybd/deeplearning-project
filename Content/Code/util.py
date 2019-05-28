@@ -8,88 +8,114 @@ from config import *
 import matplotlib.pyplot as plt
 from keras.utils import np_utils
 
+
+def Nmaxelements(list1, N):
+    final_list = []
+    for i in range(0, N):
+        max1 = 0
+        for j in range(len(list1)):
+            if list1[j] > max1:
+                max1 = list1[j]
+        list1.remove(max1)
+        final_list.append(max1)
+    return final_list
+
 # Preprocessing #
 def train_preprocess():
     # Convert MIDI to notes
-    if os.path.exists(notes_data):
-        notes = np.load(notes_data)
+    information = {}
+    instrus = {}
+    if len(os.listdir(notes_path)) == 0:
+        instrus = convert_midis_to_notes()
     else:
-        notes = convert_midis_to_notes()
+        for file in os.listdir(notes_path):
+            temp = np.load(notes_path+file)
+            instrus[file.split('.')[0]] = temp
 
-    # Create sequences
-    train_x, train_y, n_patterns, n_vocab, pitchnames = create_sequences(notes)
+    for i in instrus:
 
-    # Data reshape
-    train_x = np.reshape(train_x, (len(train_x), sequence_length, 1))
-    train_y = np_utils.to_categorical(train_y)
+        # Create sequences
+        train_x, train_y, n_patterns, n_vocab, pitchnames = create_sequences(instrus[i])
 
-    information = [train_x, train_y, n_patterns, n_vocab, pitchnames]
-    np.save(preprocess_data, information)
+        # Data reshape
+        train_x = np.reshape(train_x, (len(train_x), sequence_length, 1))
+        train_y = np_utils.to_categorical(train_y)
 
-    return train_x, train_y, n_vocab
+        information[i] = [train_x, train_y, n_patterns, n_vocab, pitchnames]
+        np.save(preprocess_data(i), information[i])
+
+    return information
 
 
 # Convert midi file dataset to notes
 def convert_midis_to_notes():
     print("Convert MIDIs to notes")
     # list of notes and chords
-    notes = []
 
+    instrus = {}
     # loading midi filepaths
-    for file in os.listdir(midi_data):
+    for file in os.listdir(midi_path):
         print(file)
         # midi type music21.stream.Score
-        midi = converter.parse(midi_data+file)
+        midi = converter.parse(midi_path + file)
         parts = instrument.partitionByInstrument(midi)
+        for i in parts.parts:
+            notes_to_parse = i.recurse()
+            length = len(notes_to_parse)
+            if length >= sequence_length:
+                seqs = i.recurse()
+                name = (str(i).split(' ')[-1])[:-1]
+                if name[:2] == '0x':
+                    # name = 'unknown'
+                    continue
+                notes = []
+                for e in seqs:
+                    if isinstance(e, note.Note):
+                        notes.append(str(e.pitch))
+                    elif isinstance(e, chord.Chord):
+                        to_append = '.'.join(str(n) for n in e.pitches)
+                        notes.append(to_append)
+                    elif isinstance(e, note.Rest):
+                        notes.append(e.name)
+                    # elif isinstance(e, tempo.MetronomeMark):
+                    #     mark = str(e.text)+"|"+str(int(e.number))+"|"+str(int(e.referent.quarterLength))+"|"+e.referent.type
+                    #     notes.append(mark)
 
-        if parts:
-            notes_to_parse = parts.parts[0].recurse()
-        else:
-            notes_to_parse = midi.flat.notes
+                if name in instrus.keys():
+                    temp = instrus.get(name)
+                    temp.extend(notes)
+                else:
+                    temp = notes
+                instrus[name] = temp
 
-        for e in notes_to_parse:
-            if isinstance(e, note.Note):
-                notes.append(str(e.pitch))
-            elif isinstance(e, chord.Chord):
-                to_append = '.'.join(str(n) for n in e.pitches)
-                notes.append(to_append)
-            elif isinstance(e, note.Rest):
-                notes.append(e.name)
-            # elif isinstance(e, tempo.MetronomeMark):
-            #     mark = str(e.text)+"|"+str(int(e.number))+"|"+str(int(e.referent.quarterLength))+"|"+e.referent.type
-            #     notes.append(mark)
+    new_intrus = {}
+    top_k = 5
+    for i in sorted(instrus, key=lambda k: len(instrus[k]), reverse=True):
+        top_k -= 1
+        new_intrus[i] = instrus[i]
+        print("Instrument {}, total {} notes with {} unique notes".format(i, len(instrus[i]), len(set(instrus[i]))))
+        # Save notes
+        np.save(notes_data(i), instrus[i])
 
-    n_vocab = len(set(notes))
+        if top_k == 0:
+            break
 
-    print("Total {} notes and {} unique notes".format(len(notes), n_vocab))
-    print("Input notes/chords stored as {} then pickled at {}".format(type(notes), notes_data))
-    print("notes/chords: {}".format(notes))
+    names = set(new_intrus.keys())
+    print("Total instrument {}. They are {}".format(len(names), names))
 
-    # Save notes
-    np.save(notes_data, notes)
+    return new_intrus
 
-    return notes
-
-def load_sequences():
-    information = np.load(preprocess_data)
-    train_x = information[0]
-    train_y = information[1]
-    n_patterns = information[2]
-    n_vocab = information[3]
-    pitchnames = information[4]
-
-    return train_x, train_y, n_patterns, n_vocab, pitchnames
 
 def create_sequences(notes):
     print("\n**Preparing sequences for training**")
-    pitchnames = sorted(set(i for i in notes)) # list of unique chords and notes
+    # list of unique chords and notes
+    pitchnames = sorted(set(i for i in notes))
     n_vocab = len(pitchnames)
 
     print('n_vocab', n_vocab)
-    print("Pitchnames (unique notes/chords from 'notes') at length {}: {}".format(len(pitchnames), pitchnames))
+    print("Pitchnames (unique notes/chords from 'notes') at length {}".format(len(pitchnames)))
     # enumerate pitchnames into dictionary embedding
     note_to_int = dict((note, number) for number, note in enumerate(pitchnames))
-    print("Note to integer embedding created at length {}".format(len(note_to_int)))
 
     train_x = []
     train_y = []
@@ -109,12 +135,10 @@ def create_sequences(notes):
         output_add = note_to_int[sequence_out]
         train_y.append(output_add) # single note
 
-    print("Network input and output created with (pre-transform) lengths {} and {}".format(len(train_x),len(train_y)))
+    print("Network input and output created with (pre-transform) lengths {}".format(len(train_x)))
     # print("Network input and output first list items: {} and {}".format(train_x[0],train_y[0]))
     # print("Network input list item length: {}".format(len(train_x[0])))
     n_patterns = len(train_x) # notes less sequence length
-    print("Lengths. N Vocab: {} N Patterns: {} Pitchnames: {}".format(n_vocab,n_patterns, len(pitchnames)))
-
     return train_x, train_y, n_patterns, n_vocab, pitchnames
 
 
@@ -174,42 +198,47 @@ def generate_notes(model, train_x, n_vocab, pitchnames):
 
     return prediction_output
 
-def create_midi(prediction_output):
+def create_midi(i, prediction_output):
     print("\n**Creating midi**")
     offset = 0
     output_notes = []
 
     for pattern in prediction_output:
         # prepares chords (if) and notes (else)
-        if ('.' in pattern) or pattern.isdigit():
+        output_notes.append(instrument.fromString(i))
+        if '.' in pattern:
             notes_in_chord = pattern.split('.')
             notes = []
             for current_note in notes_in_chord:
-                new_note = note.Note(int(current_note))
-                new_note.storedInstrument = instrument.Xylophone()
+                new_note = note.Note(current_note)
+                new_note.storedInstrument = instrument.fromString(i)
                 notes.append(new_note)
             new_chord = chord.Chord(notes)
             new_chord.offset = offset
             output_notes.append(new_chord)
+        elif pattern == 'rest':
+            new_note = note.Rest()
+            new_note.offset = offset
+            new_note.storedInstrument = instrument.fromString(i)
+            output_notes.append(new_note)
         else:
             new_note = note.Note(pattern)
             new_note.offset = offset
-            new_note.storedInstrument = instrument.Xylophone()
-
+            new_note.storedInstrument = instrument.fromString(i)
             output_notes.append(new_note)
         offset += offset_adj
 
     return output_notes
 
 
-def callback_builder():
+def callback_builder(i):
     callbacks_list = []
-    callbacks_list.append(CSVLogger(loss_log, separator=','))
+    callbacks_list.append(CSVLogger(train_instrument_path(i, 4), separator=','))
     return callbacks_list
 
 
 # fungsi untuk membuat plot akurasi dan loss tiap epoch
-def create_plot(hist):
+def create_plot(i, hist):
     xc = range(epochs)
     a = hist.history["loss"]
     b = hist.history['val_loss']
@@ -221,4 +250,4 @@ def create_plot(hist):
     plt.title('train_loss vs val_loss')
     plt.grid(True)
     plt.legend(['train', 'test'])
-    plt.savefig(loss_graph)
+    plt.savefig(train_instrument_path(i, 3))
