@@ -9,10 +9,10 @@ print("Convert MIDIs to notes")
 
 instrus = {}
 # loading midi filepaths
-for file in os.listdir(midi_data):
+for file in os.listdir(midi_path):
     print(file)
     # midi type music21.stream.Score
-    midi = converter.parse(midi_data + file)
+    midi = converter.parse(midi_path + file)
     parts = instrument.partitionByInstrument(midi)
     aa = []
     for i in parts.parts:
