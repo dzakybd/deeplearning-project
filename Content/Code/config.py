@@ -21,7 +21,6 @@ offset_adj = 0.5
 first_layer = 512
 drop = 0.5
 
-
 # Fixed parameter #
 dataset_base = "../Dataset/"
 midi_path = dataset_base + "midi/"

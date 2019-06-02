@@ -1,24 +1,13 @@
 import os
 import numpy as np
-from music21 import converter, note, chord, instrument, tempo
+from music21 import *
 from keras.models import Sequential
 from keras.layers import Bidirectional, Dense, Dropout, CuDNNLSTM, Activation
 from keras.callbacks import CSVLogger
 from config import *
 import matplotlib.pyplot as plt
 from keras.utils import np_utils
-
-
-def Nmaxelements(list1, N):
-    final_list = []
-    for i in range(0, N):
-        max1 = 0
-        for j in range(len(list1)):
-            if list1[j] > max1:
-                max1 = list1[j]
-        list1.remove(max1)
-        final_list.append(max1)
-    return final_list
+from fractions import Fraction
 
 # Preprocessing #
 def train_preprocess():
@@ -41,59 +30,64 @@ def train_preprocess():
         train_x = np.reshape(train_x, (len(train_x), sequence_length, 1))
         train_y = np_utils.to_categorical(train_y)
 
+        print("train_x", np.shape(train_x))
+        print("train_y", np.shape(train_y))
+
         information[i] = [train_x, train_y, n_patterns, n_vocab, pitchnames]
         np.save(preprocess_data(i), information[i])
 
     return information
 
-
 # Convert midi file dataset to notes
 def convert_midis_to_notes():
     print("Convert MIDIs to notes")
-    # list of notes and chords
-
     instrus = {}
-    # loading midi filepaths
     for file in os.listdir(midi_path):
         print(file)
-        # midi type music21.stream.Score
         midi = converter.parse(midi_path + file)
         parts = instrument.partitionByInstrument(midi)
         for i in parts.parts:
+            name = (str(i).split(' ')[-1])[:-1]
             notes_to_parse = i.recurse()
             length = len(notes_to_parse)
-            if length >= sequence_length:
-                seqs = i.recurse()
-                name = (str(i).split(' ')[-1])[:-1]
-                if name[:2] == '0x':
-                    # name = 'unknown'
-                    continue
+            if name[:2] == '0x':
+                # name = 'unknown'
+                continue
+            elif length >= sequence_length:
                 notes = []
-                for e in seqs:
-                    if isinstance(e, note.Note):
-                        notes.append(str(e.pitch))
-                    elif isinstance(e, chord.Chord):
-                        to_append = '.'.join(str(n) for n in e.pitches)
-                        notes.append(to_append)
-                    elif isinstance(e, note.Rest):
-                        notes.append(e.name)
-                    # elif isinstance(e, tempo.MetronomeMark):
-                    #     mark = str(e.text)+"|"+str(int(e.number))+"|"+str(int(e.referent.quarterLength))+"|"+e.referent.type
-                    #     notes.append(mark)
+                seqs = i.recurse()
+                for element in seqs:
+                    if isinstance(element, note.Note):
+                        temp = str(element.pitch.nameWithOctave)+"|"+str(element.quarterLength)
+                        notes.append(temp)
+                    elif isinstance(element, chord.Chord):
+                        pitches = []
+                        for p1 in element.pitches:
+                            p2 = str(p1.nameWithOctave)
+                            pitches.append(p2)
+                        pitch_names = '.'.join(n for n in set(pitches))
+                        temp = pitch_names+"|"+str(element.quarterLength)
+                        notes.append(temp)
+                    elif isinstance(element, note.Rest):
+                        temp = element.name + "|" + str(element.quarterLength)
+                        notes.append(temp)
 
-                if name in instrus.keys():
-                    temp = instrus.get(name)
-                    temp.extend(notes)
-                else:
-                    temp = notes
-                instrus[name] = temp
+                if not len(notes) == 0:
+                    if name in instrus.keys():
+                        temp = instrus.get(name)
+                        temp.extend(notes)
+                    else:
+                        temp = notes
+                    instrus[name] = temp
 
     new_intrus = {}
     top_k = 5
     for i in sorted(instrus, key=lambda k: len(instrus[k]), reverse=True):
         top_k -= 1
         new_intrus[i] = instrus[i]
+
         print("Instrument {}, total {} notes with {} unique notes".format(i, len(instrus[i]), len(set(instrus[i]))))
+
         # Save notes
         np.save(notes_data(i), instrus[i])
 
@@ -109,7 +103,9 @@ def convert_midis_to_notes():
 def create_sequences(notes):
     print("\n**Preparing sequences for training**")
     # list of unique chords and notes
+    # pitchnames = sorted(set(i for i in notes))
     pitchnames = sorted(set(i for i in notes))
+
     n_vocab = len(pitchnames)
 
     print('n_vocab', n_vocab)
@@ -199,34 +195,50 @@ def generate_notes(model, train_x, n_vocab, pitchnames):
     return prediction_output
 
 def create_midi(i, prediction_output):
+    count = 0
     print("\n**Creating midi**")
-    offset = 0
     output_notes = []
-
+    offset = 0
     for pattern in prediction_output:
         # prepares chords (if) and notes (else)
         output_notes.append(instrument.fromString(i))
-        if '.' in pattern:
-            notes_in_chord = pattern.split('.')
-            notes = []
+        notes = pattern.split("|")[0]
+        duration = pattern.split("|")[-1]
+        if '/' in duration:
+            duration = round(float(Fraction(duration)), 2)
+        else:
+            duration = round(float(duration), 2)
+        print(notes, duration)
+        if '.' in notes:
+            notes_in_chord = notes.split('.')
+            n = []
             for current_note in notes_in_chord:
                 new_note = note.Note(current_note)
                 new_note.storedInstrument = instrument.fromString(i)
-                notes.append(new_note)
-            new_chord = chord.Chord(notes)
-            new_chord.offset = offset
+                n.append(new_note)
+            new_chord = chord.Chord(n, quarterLength=duration)
+            # new_chord.offset = offset
             output_notes.append(new_chord)
-        elif pattern == 'rest':
-            new_note = note.Rest()
-            new_note.offset = offset
+        elif notes == 'rest':
+            new_note = note.Rest(quarterLength=duration)
             new_note.storedInstrument = instrument.fromString(i)
+            # new_note.offset = offset
             output_notes.append(new_note)
         else:
-            new_note = note.Note(pattern)
-            new_note.offset = offset
+            new_note = note.Note(notes, quarterLength=duration)
             new_note.storedInstrument = instrument.fromString(i)
+            # new_note.offset = offset
             output_notes.append(new_note)
-        offset += offset_adj
+        # offset +=offset_adj
+
+        # Save midi & notes
+        midi_stream = stream.Stream(output_notes)
+        # midi_stream.write('midi', fp=generated_midi(i))
+        mid = midi.translate.streamToMidiFile(midi_stream)
+        mid.open('out'+str(count)+'.mid', 'wb')
+        mid.write()
+        mid.close()
+        count+=1
 
     return output_notes
 
