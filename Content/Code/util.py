@@ -49,18 +49,22 @@ def train_preprocess():
 # Convert midi file dataset to notes
 def convert_midis_to_notes():
     instrus = {}
+    used_inst = [
+        'Celesta',
+        'Bass',
+        'Flute',
+        'Sitar',
+        'Marimba'
+    ]
     for file in os.listdir(midi_path):
         print(file)
         midi = converter.parse(midi_path + file)
         parts = instrument.partitionByInstrument(midi)
         for i in parts.parts:
             name = (str(i).split(' ')[-1])[:-1]
-            notes_to_parse = i.recurse()
-            length = len(notes_to_parse)
-            if name[:2] == '0x':
+            if name not in used_inst:
                 continue
             else:
-
                 notes = []
                 seqs = i.recurse()
                 prev_offset = 0
@@ -104,15 +108,24 @@ def convert_midis_to_notes():
                         temp = notes
                     instrus[name] = temp
 
-    new_instrus = {}
+    # new_instrus = {}
+    # top_k = 3
+    #
+    # for i in instrus.keys():
+    #     if len(instrus[i]) < sequence_length:
+    #         instrus[i] = []
+    #
+    # for i in sorted(instrus, key=lambda k: len(instrus[k]), reverse=True):
+    #     top_k -= 1
+    #     new_instrus[i] = instrus[i]
+    #
+    #     if top_k == 0:
+    #         break
+
     for i in instrus.keys():
-        if len(instrus[i]) >= sequence_length:
-            new_instrus[i] = instrus[i]
+        print("Instrument {} have {} unique notes".format(i, len(instrus[i])))
 
-    names = new_instrus.keys()
-    print("Total instrument {}. They are {}".format(len(names), names))
-
-    return new_instrus
+    return instrus
 
 
 def create_sequences(notes):
@@ -203,10 +216,10 @@ def generate_notes(model, train_x, pitchnames):
 
 
 def create_midi(i, prediction_output):
-    output_notes = []
+    output_notes = stream.Part()
     offset = 0
+    output_notes.append(instrument.fromString(i))
     for pattern in prediction_output:
-        output_notes.append(instrument.fromString(i))
         notes = pattern.split("|")[0]
         # duration = round(float(pattern.split("|")[1]), 2)
         # note_offset = round(float(pattern.split("|")[2]), 2)

@@ -9,6 +9,7 @@ for file in os.listdir(preprocess_path):
         temp = np.load(preprocess_path + file)
         information[file.split('.')[0]] = temp
 
+ins = []
 for i in information:
     print("Start generating {} instrument".format(i))
 
@@ -22,14 +23,11 @@ for i in information:
 
     # Convert to MIDI
     output_notes = create_midi(i, prediction_output)
-
-    # Save midi & notes
-    midi_stream = stream.Stream(output_notes)
-    midi_stream.write('midi', fp=generated_midi(i))
+    ins.append(output_notes)
 
     print("{} instrument created".format(i))
+# Save midi & notes
+midi_stream = stream.Stream(ins)
+midi_stream.write('midi', fp=generated_midi(i))
 
-# visual_midi = i
-# visual_midi.write('text')
-# visual_midi.plot('histogram', 'pitch')
-# visual_midi.savefig(notes_graph(i))
+

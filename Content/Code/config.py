@@ -1,4 +1,5 @@
 # Default parameter #
+from midi2audio import FluidSynth
 
 reset_preprocess = False
 use_bidirectional = False
@@ -12,7 +13,7 @@ drop = 0.2
 decay = 1e-4
 
 epochs = 50
-batch_size = 20
+batch_size = 100
 lr_rate = 0.01
 offset_adj = 0.5
 
@@ -88,3 +89,6 @@ def train_instrument_path(instrument, usage=0):
 def generated_midi(instrument):
     return test_path + "{}.mid".format(instrument)
 
+
+def music_path(name):
+    return result_base + "final_music/{}.wav".format(name)
