@@ -1,43 +1,59 @@
-# Configurable parameter #
+# Default parameter #
+
+use_bidirectional = False
+rrn_type = 'LSTM'
+depth = 3
+unit_size = 256
+sequence_length = 100
+
+use_regularizer = True
+drop = 0.2
+decay = 1e-4
+
+epochs = 50
+batch_size = 20
+lr_rate = 0.01
+offset_adj = 0.5
+
+# Experiment parameter #
+
 scenario = 1
 
 if scenario == 1:
-    rrn_type = 1
+    pass
 elif scenario == 2:
-    rrn_type = 1
+    depth = 2
 elif scenario == 3:
-    rrn_type = 1
+    depth = 1
 elif scenario == 4:
-    rrn_type = 2
+    rrn_type = 'GRU'
 elif scenario == 5:
-    rrn_type = 2
+    rrn_type = 'GRU'
+    depth = 2
+elif scenario == 6:
+    rrn_type = 'GRU'
+    depth = 1
+elif scenario == 7:
+    use_regularizer = False
 
-
-epochs = 10
-batch_size = 32
-sequence_length = 200
-temperature = 1.0
-offset_adj = 0.5
-first_layer = 512
-drop = 0.5
 
 # Fixed parameter #
 dataset_base = "../Dataset/"
 midi_path = dataset_base + "midi/"
-notes_path = dataset_base + "notes/"
-
-
-def notes_data(instrument):
-    return notes_path + '{}.npy'.format(instrument)
 
 result_base = "../Result/"
+preprocess_path = result_base + 'preprocess/'
 scenario_path = result_base + "scenario-{}/".format(scenario)
-preprocess_path = scenario_path + 'preprocess/'
 train_path = scenario_path + 'train/'
+test_path = scenario_path + 'test/'
 
 
 def preprocess_data(instrument):
     return preprocess_path + '{}.npy'.format(instrument)
+
+
+def preprocess_summary(instrument):
+    return preprocess_path + '{}_summary.txt'.format(instrument)
 
 
 def train_instrument_path(instrument, usage=0):
@@ -49,7 +65,7 @@ def train_instrument_path(instrument, usage=0):
     elif usage == 3:
         path = path + 'loss_graph.png'
     elif usage == 4:
-        path = path + 'loss_log.csv'
+        path = path + 'train_log.csv'
     elif usage == 5:
         path = path + 'summary.txt'
     else:
@@ -58,9 +74,5 @@ def train_instrument_path(instrument, usage=0):
 
 
 def generated_midi(instrument):
-    return scenario_path + "test/{}.mid".format(instrument)
-
-
-def generated_notes(instrument):
-    return scenario_path + "test/{}.npy".format(instrument)
+    return test_path + "{}.mid".format(instrument)
 

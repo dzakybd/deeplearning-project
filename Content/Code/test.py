@@ -2,32 +2,34 @@ from keras.models import load_model
 from util import *
 from config import *
 from music21 import *
-import glob
 
 information = {}
 for file in os.listdir(preprocess_path):
-    temp = np.load(preprocess_path + file)
-    information[file.split('.')[0]] = temp
+    if file.split('.')[-1] == 'npy':
+        temp = np.load(preprocess_path + file)
+        information[file.split('.')[0]] = temp
 
 for i in information:
-    print("Generate on {}".format(i))
+    print("Start generating {} instrument".format(i))
 
     train_x = information[i][0]
-    n_vocab = information[i][3]
-    pitchnames = information[i][4]
-    # train_x = train_x / float(n_vocab)
+    pitchnames = information[i][2]
 
     # Load model
     model = load_model(train_instrument_path(i, 1))
 
-    prediction_output = generate_notes(model, train_x, n_vocab, pitchnames)
-    # print("prediction_output", prediction_output)
-
+    prediction_output = generate_notes(model, train_x, pitchnames)
 
     # Convert to MIDI
-    print("Generated Note Length: {}\nFirst 10: {}".format(len(prediction_output), prediction_output[:10]))
     output_notes = create_midi(i, prediction_output)
-    # print("output_notes", output_notes)
-    # np.save(generated_notes(i), output_notes)
 
-    # print("Midi saved at: {}\nOutput notes/chords at {}".format(generated_midi(i), generated_notes(i)))
+    # Save midi & notes
+    midi_stream = stream.Stream(output_notes)
+    midi_stream.write('wav', fp=generated_midi(i))
+
+    print("{} instrument created".format(i))
+
+# visual_midi = i
+# visual_midi.write('text')
+# visual_midi.plot('histogram', 'pitch')
+# visual_midi.savefig(notes_graph(i))

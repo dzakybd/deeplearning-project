@@ -1,46 +1,54 @@
 import os
 import numpy as np
 from music21 import *
-from keras.models import Sequential
-from keras.layers import Bidirectional, Dense, Dropout, CuDNNLSTM, Activation
+from keras.models import Sequential, Model
+from keras.layers import Dense, Dropout, CuDNNLSTM, Activation, CuDNNGRU, LSTM, GRU, Bidirectional, Layer, Input, BatchNormalization
+from keras.regularizers import l2
+from keras.optimizers import Adam, SGD
 from keras.callbacks import CSVLogger
 from config import *
 import matplotlib.pyplot as plt
 from keras.utils import np_utils
 from fractions import Fraction
 
+
 # Preprocessing #
 def train_preprocess():
-    # Convert MIDI to notes
     information = {}
-    instrus = {}
-    if len(os.listdir(notes_path)) == 0:
-        instrus = convert_midis_to_notes()
-    else:
-        for file in os.listdir(notes_path):
-            temp = np.load(notes_path+file)
-            instrus[file.split('.')[0]] = temp
+    print('Convert MIDI to notes')
+    instrus = convert_midis_to_notes()
 
     for i in instrus:
 
+        print('Create sequences')
         # Create sequences
-        train_x, train_y, n_patterns, n_vocab, pitchnames = create_sequences(instrus[i])
+        train_x, train_y, pitchnames = create_sequences(instrus[i])
 
+        print('Data reshape')
         # Data reshape
         train_x = np.reshape(train_x, (len(train_x), sequence_length, 1))
-        train_y = np_utils.to_categorical(train_y)
+        train_y = np_utils.to_categorical(train_y, len(pitchnames))
 
-        print("train_x", np.shape(train_x))
-        print("train_y", np.shape(train_y))
-
-        information[i] = [train_x, train_y, n_patterns, n_vocab, pitchnames]
+        information[i] = [train_x, train_y, pitchnames]
         np.save(preprocess_data(i), information[i])
+
+        # Write preprocess summary
+        f = open(preprocess_summary(i), 'w')
+        info = ""
+        info += 'Instrument: ' + i
+        info += '\nData size: ' + str(len(train_x))
+        info += '\nSequence out data: ' + str(len(train_y))
+        info += '\nSequence length: ' + str(train_x.shape[-2])
+        info += '\nNumber of unique notes: ' + str(len(pitchnames))
+        info += '\nSample unique note: ' + pitchnames[0]
+        print(info)
+        f.write(info)
+        f.close()
 
     return information
 
 # Convert midi file dataset to notes
 def convert_midis_to_notes():
-    print("Convert MIDIs to notes")
     instrus = {}
     for file in os.listdir(midi_path):
         print(file)
@@ -51,27 +59,44 @@ def convert_midis_to_notes():
             notes_to_parse = i.recurse()
             length = len(notes_to_parse)
             if name[:2] == '0x':
-                # name = 'unknown'
                 continue
             elif length >= sequence_length:
+
                 notes = []
                 seqs = i.recurse()
+                prev_offset = 0
+                offset_dif = 0
+
                 for element in seqs:
-                    if isinstance(element, note.Note):
-                        temp = str(element.pitch.nameWithOctave)+"|"+str(element.quarterLength)
+                    temp = ""
+                    duration = round(float(element.quarterLength), 2)
+                    if prev_offset != element.offset:
+                        offset_dif = round(float(element.offset - prev_offset), 2)
+                    if element.quarterLength == 0.0:
+                        continue
+                    elif isinstance(element, note.Note):
+                        temp = str(element.pitch.nameWithOctave)
+                        temp += "|"+str(duration)
+                        temp += "|"+str(offset_dif)
                         notes.append(temp)
                     elif isinstance(element, chord.Chord):
                         pitches = []
                         for p1 in element.pitches:
                             p2 = str(p1.nameWithOctave)
                             pitches.append(p2)
-                        pitch_names = '.'.join(n for n in set(pitches))
-                        temp = pitch_names+"|"+str(element.quarterLength)
+                        pitches = set(pitches)
+                        pitch_names = '.'.join(str(n) for n in pitches)
+                        temp = pitch_names
+                        temp += "|" + str(duration)
+                        temp += "|" + str(offset_dif)
                         notes.append(temp)
                     elif isinstance(element, note.Rest):
-                        temp = element.name + "|" + str(element.quarterLength)
+                        temp = element.name
+                        temp += "|" + str(duration)
+                        temp += "|" + str(offset_dif)
                         notes.append(temp)
-
+                    prev_offset = element.offset
+                    # print(temp)
                 if not len(notes) == 0:
                     if name in instrus.keys():
                         temp = instrus.get(name)
@@ -86,11 +111,6 @@ def convert_midis_to_notes():
         top_k -= 1
         new_intrus[i] = instrus[i]
 
-        print("Instrument {}, total {} notes with {} unique notes".format(i, len(instrus[i]), len(set(instrus[i]))))
-
-        # Save notes
-        np.save(notes_data(i), instrus[i])
-
         if top_k == 0:
             break
 
@@ -101,15 +121,9 @@ def convert_midis_to_notes():
 
 
 def create_sequences(notes):
-    print("\n**Preparing sequences for training**")
     # list of unique chords and notes
-    # pitchnames = sorted(set(i for i in notes))
     pitchnames = sorted(set(i for i in notes))
 
-    n_vocab = len(pitchnames)
-
-    print('n_vocab', n_vocab)
-    print("Pitchnames (unique notes/chords from 'notes') at length {}".format(len(pitchnames)))
     # enumerate pitchnames into dictionary embedding
     note_to_int = dict((note, number) for number, note in enumerate(pitchnames))
 
@@ -119,96 +133,90 @@ def create_sequences(notes):
     # i equals total notes less declared sequence length of LSTM (ie 5000 - 100)
     # sequence input for each i is list of notes i to end of sequence length (ie 0-100 for i = 0)
     # sequence output for each i is single note at i + sequence length (ie 100 for i = 0)
-    for i in range(0, len(notes) - sequence_length,1):
-        sequence_in = notes[i:i + sequence_length] # 100
-        sequence_out = notes[i + sequence_length] # 1
+    for i in range(0, len(notes) - sequence_length, 1):
+        sequence_in = notes[i:i + sequence_length]
+        sequence_out = notes[i + sequence_length]
 
-        # enumerate notes and chord sequences with note_to_int enumerated encoding
-        # network input/output is a list of encoded notes and chords based on note_to_int encoding
-        # if 100 unique notes/chords, the encoding will be between 0-100
         input_add = [note_to_int[char] for char in sequence_in]
-        train_x.append(input_add) # sequence length
+        train_x.append(input_add)
         output_add = note_to_int[sequence_out]
-        train_y.append(output_add) # single note
+        train_y.append(output_add)
 
-    print("Network input and output created with (pre-transform) lengths {}".format(len(train_x)))
-    # print("Network input and output first list items: {} and {}".format(train_x[0],train_y[0]))
-    # print("Network input list item length: {}".format(len(train_x[0])))
-    n_patterns = len(train_x) # notes less sequence length
-    return train_x, train_y, n_patterns, n_vocab, pitchnames
+    return train_x, train_y, pitchnames
 
 
-def get_model(train_x, n_vocab):
-    print("\n**LSTM model initializing**")
-    # this is a complete model file
+def get_model(n_vocab):
 
-    # network input shape (notes - sequence length, sequence_length, 1)
-    timesteps = train_x.shape[1] # sequence length
-    data_dim = train_x.shape[2] # 1
+    if rrn_type == 'LSTM':
+        RNNLayer = CuDNNLSTM
+    else:
+        RNNLayer = CuDNNGRU
 
-    print("Input nodes: {} Dropout: {}".format(first_layer, drop))
-    print("Input shape (timesteps, data_dim): ({},{})".format(timesteps, data_dim))
-    # for LSTM models, return_sequences sb True for all but the last LSTM layer
-    # this will input the full sequence rather than a single value
-    model = Sequential()
-    model.add(Bidirectional(CuDNNLSTM(first_layer), input_shape=(timesteps, data_dim)))
-    model.add(Dense(first_layer))
-    model.add(Dropout(drop))
-    model.add(Dense(n_vocab)) # based on number of unique notes
-    model.add(Dropout(drop))
-    model.add(Activation('softmax'))
+    model_input = Input(shape=(sequence_length, 1))
 
-    model.compile(loss='categorical_crossentropy', optimizer='adam')
+    for i in range(depth):
 
+        if use_regularizer:
+            regularizer = {'kernel_regularizer':l2(decay),
+                           'recurrent_regularizer':l2(decay),
+                           'bias_regularizer':l2(decay)}
+        else:
+            regularizer = {}
+
+        if use_bidirectional:
+            x = Bidirectional(RNNLayer(unit_size, return_sequences=False if i == depth-1 else True,
+                                       kernel_initializer='he_normal', **regularizer))(model_input if i==0 else x)
+        else:
+            x = RNNLayer(unit_size, return_sequences=False if i == depth - 1 else True,
+                         kernel_initializer='he_normal', **regularizer)(model_input if i == 0 else x)
+
+        if use_regularizer:
+            x = BatchNormalization()(x)
+            x = Dropout(drop)(x)
+
+    x = Dense(n_vocab)(x)
+    model_output = Activation('softmax')(x)
+
+    model = Model(model_input, model_output)
+    optimizer = SGD(lr=lr_rate, decay=1e-6, momentum=0.9, nesterov=True)
+    model.compile(loss='categorical_crossentropy', optimizer=optimizer)
     return model
 
-# CREATE MIDI
-# sample function from Keras Nietsche example
-def sample(preds, temperature=1.0):
-    # helper function to sample an index from a probability array
-    preds = np.asarray(preds).astype('float64')
-    preds = np.log(preds) / temperature
-    exp_preds = np.exp(preds)
-    preds = exp_preds / np.sum(exp_preds)
-    probas = np.random.multinomial(1, preds, 1)
-    return np.argmax(probas)
 
-def generate_notes(model, train_x, n_vocab, pitchnames):
-    print("\n**Generating notes**")
+def generate_notes(model, train_x, pitchnames):
     # convert integers back to notes/chords
     int_to_note = dict((number, note) for number, note in enumerate(pitchnames))
+    n_vocab = len(pitchnames)
     # randomly instantiate with single number from 0 to length of network input
     start = np.random.randint(0, len(train_x) - 1)
     pattern = train_x[start]
     pattern = np.squeeze(pattern).tolist()
     prediction_output = []
-    # generated notes (ie 500)
     for note_index in range(sequence_length):
-        prediction_input = np.reshape(pattern, (1, len(pattern), 1)) / float(n_vocab)
-        prediction = model.predict(prediction_input, verbose=0)[0]
-        index = sample(prediction, temperature)
+        prediction_input = np.reshape(pattern, (1, len(pattern), 1))
+        prediction_input = prediction_input / float(n_vocab)
+        prediction = model.predict(prediction_input, verbose=0)
+
+        index = np.argmax(prediction)
         result = int_to_note[index]
         prediction_output.append(result)
+
         pattern.append(index)
         pattern = pattern[1:len(pattern)]
 
     return prediction_output
 
+
 def create_midi(i, prediction_output):
-    count = 0
-    print("\n**Creating midi**")
     output_notes = []
     offset = 0
     for pattern in prediction_output:
-        # prepares chords (if) and notes (else)
         output_notes.append(instrument.fromString(i))
         notes = pattern.split("|")[0]
-        duration = pattern.split("|")[-1]
-        if '/' in duration:
-            duration = round(float(Fraction(duration)), 2)
-        else:
-            duration = round(float(duration), 2)
-        print(notes, duration)
+        # duration = round(float(pattern.split("|")[1]), 2)
+        # note_offset = round(float(pattern.split("|")[2]), 2)
+        # duration += offset_adj
+        # print(notes, duration, note_offset)
         if '.' in notes:
             notes_in_chord = notes.split('.')
             n = []
@@ -216,29 +224,23 @@ def create_midi(i, prediction_output):
                 new_note = note.Note(current_note)
                 new_note.storedInstrument = instrument.fromString(i)
                 n.append(new_note)
-            new_chord = chord.Chord(n, quarterLength=duration)
-            # new_chord.offset = offset
+            new_chord = chord.Chord(n)
+            # new_chord.quarterLength = duration
+            new_chord.offset = offset
             output_notes.append(new_chord)
         elif notes == 'rest':
-            new_note = note.Rest(quarterLength=duration)
+            new_note = note.Rest()
+            # new_note.quarterLength = duration
             new_note.storedInstrument = instrument.fromString(i)
-            # new_note.offset = offset
+            new_note.offset = offset
             output_notes.append(new_note)
         else:
-            new_note = note.Note(notes, quarterLength=duration)
+            new_note = note.Note(notes)
             new_note.storedInstrument = instrument.fromString(i)
-            # new_note.offset = offset
+            # new_note.quarterLength = duration
+            new_note.offset = offset
             output_notes.append(new_note)
-        # offset +=offset_adj
-
-        # Save midi & notes
-        midi_stream = stream.Stream(output_notes)
-        # midi_stream.write('midi', fp=generated_midi(i))
-        mid = midi.translate.streamToMidiFile(midi_stream)
-        mid.open('out'+str(count)+'.mid', 'wb')
-        mid.write()
-        mid.close()
-        count+=1
+        offset += offset_adj
 
     return output_notes
 
@@ -249,17 +251,14 @@ def callback_builder(i):
     return callbacks_list
 
 
-# fungsi untuk membuat plot akurasi dan loss tiap epoch
-def create_plot(i, hist):
+def create_plot(i, hist, title):
     xc = range(epochs)
-    a = hist.history["loss"]
-    b = hist.history['val_loss']
+    a = hist.history[title]
     plt.figure()
     plt.plot(xc, a)
-    plt.plot(xc, b)
     plt.xlabel('epoch')
-    plt.ylabel("loss")
-    plt.title('train_loss vs val_loss')
+    plt.ylabel(title)
+    plt.title('train_'+title)
     plt.grid(True)
-    plt.legend(['train', 'test'])
     plt.savefig(train_instrument_path(i, 3))
+
