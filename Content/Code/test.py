@@ -25,7 +25,7 @@ for i in information:
 
     # Save midi & notes
     midi_stream = stream.Stream(output_notes)
-    midi_stream.write('wav', fp=generated_midi(i))
+    midi_stream.write('midi', fp=generated_midi(i))
 
     print("{} instrument created".format(i))
 

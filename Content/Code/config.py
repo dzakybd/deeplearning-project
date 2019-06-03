@@ -1,5 +1,6 @@
 # Default parameter #
 
+reset_preprocess = False
 use_bidirectional = False
 rrn_type = 'LSTM'
 depth = 3
@@ -34,8 +35,19 @@ elif scenario == 6:
     rrn_type = 'GRU'
     depth = 1
 elif scenario == 7:
-    use_regularizer = False
-
+    reset_preprocess = True
+    sequence_length = 200
+elif scenario == 8:
+    reset_preprocess = True
+    sequence_length = 300
+elif scenario == 9:
+    rrn_type = 'GRU'
+    reset_preprocess = True
+    sequence_length = 200
+elif scenario == 10:
+    rrn_type = 'GRU'
+    reset_preprocess = True
+    sequence_length = 300
 
 # Fixed parameter #
 dataset_base = "../Dataset/"

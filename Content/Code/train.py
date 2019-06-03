@@ -5,7 +5,7 @@ from keras import backend as K
 import time
 
 information = {}
-if len(os.listdir(preprocess_path)) == 0:
+if len(os.listdir(preprocess_path)) == 0 or reset_preprocess:
     print("Start preprocessing")
     information = train_preprocess()
 else:
@@ -50,10 +50,6 @@ for i in information:
     info += '\nScenario: ' + str(scenario)
     info += '\nRNN type: ' + rrn_type
     info += '\nDepth: ' + str(depth)
-    if use_nietsche_sample:
-        info += '\nUse nietsche sampling: ' + 'Yes / Temperature: ' + str(temperature)
-    else:
-        info += '\nUse nietsche sampling: No'
     if use_regularizer:
         info += '\nUse regularizer: ' + 'Yes / Drouput: ' + str(drop) +'/ Weight decay: ' + str(decay)
     else:

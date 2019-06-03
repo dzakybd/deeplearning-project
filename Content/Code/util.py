@@ -1,15 +1,14 @@
 import os
 import numpy as np
 from music21 import *
-from keras.models import Sequential, Model
-from keras.layers import Dense, Dropout, CuDNNLSTM, Activation, CuDNNGRU, LSTM, GRU, Bidirectional, Layer, Input, BatchNormalization
+from keras.models import Model
+from keras.layers import Dense, Dropout, CuDNNLSTM, Activation, CuDNNGRU, Bidirectional, Input, BatchNormalization
 from keras.regularizers import l2
-from keras.optimizers import Adam, SGD
+from keras.optimizers import SGD
 from keras.callbacks import CSVLogger
 from config import *
 import matplotlib.pyplot as plt
 from keras.utils import np_utils
-from fractions import Fraction
 
 
 # Preprocessing #
@@ -60,7 +59,7 @@ def convert_midis_to_notes():
             length = len(notes_to_parse)
             if name[:2] == '0x':
                 continue
-            elif length >= sequence_length:
+            else:
 
                 notes = []
                 seqs = i.recurse()
@@ -105,19 +104,15 @@ def convert_midis_to_notes():
                         temp = notes
                     instrus[name] = temp
 
-    new_intrus = {}
-    top_k = 5
-    for i in sorted(instrus, key=lambda k: len(instrus[k]), reverse=True):
-        top_k -= 1
-        new_intrus[i] = instrus[i]
+    new_instrus = {}
+    for i in instrus.keys():
+        if len(instrus[i]) >= sequence_length:
+            new_instrus[i] = instrus[i]
 
-        if top_k == 0:
-            break
-
-    names = set(new_intrus.keys())
+    names = new_instrus.keys()
     print("Total instrument {}. They are {}".format(len(names), names))
 
-    return new_intrus
+    return new_instrus
 
 
 def create_sequences(notes):
