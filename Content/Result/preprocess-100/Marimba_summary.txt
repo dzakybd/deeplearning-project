@@ -1,0 +1,6 @@
+Instrument: Marimba
+Data size: 5170
+Sequence out data: 5170
+Sequence length: 100
+Number of unique notes: 1063
+Sample unique note: A1|2.0|0.25

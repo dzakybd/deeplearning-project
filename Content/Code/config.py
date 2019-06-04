@@ -13,13 +13,13 @@ drop = 0.2
 decay = 1e-4
 
 epochs = 50
-batch_size = 100
+batch_size = 20
 lr_rate = 0.01
 offset_adj = 0.5
 
 # Experiment parameter #
 
-scenario = 1
+scenario = 8
 
 if scenario == 1:
     pass
@@ -36,19 +36,39 @@ elif scenario == 6:
     rrn_type = 'GRU'
     depth = 1
 elif scenario == 7:
+    depth = 1
     reset_preprocess = True
     sequence_length = 200
 elif scenario == 8:
     reset_preprocess = True
     sequence_length = 300
+    depth = 1
 elif scenario == 9:
     rrn_type = 'GRU'
     reset_preprocess = True
     sequence_length = 200
+    depth = 1
 elif scenario == 10:
     rrn_type = 'GRU'
     reset_preprocess = True
     sequence_length = 300
+    depth = 1
+elif scenario == 11:
+    depth = 1
+    unit_size = 512
+elif scenario == 12:
+    depth = 1
+    unit_size = 1024
+elif scenario == 13:
+    reset_preprocess = True
+    rrn_type = 'GRU'
+    depth = 1
+    unit_size = 512
+elif scenario == 14:
+    reset_preprocess = True
+    rrn_type = 'GRU'
+    depth = 1
+    unit_size = 1024
 
 # Fixed parameter #
 dataset_base = "../Dataset/"

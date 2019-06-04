@@ -1,0 +1,6 @@
+Instrument: Sitar
+Data size: 1194
+Sequence out data: 1194
+Sequence length: 100
+Number of unique notes: 184
+Sample unique note: A5.G5|0.25|0.42

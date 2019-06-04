@@ -1,0 +1,6 @@
+Instrument: Flute
+Data size: 953
+Sequence out data: 953
+Sequence length: 300
+Number of unique notes: 696
+Sample unique note: A2.G#3|0.25|0.17
