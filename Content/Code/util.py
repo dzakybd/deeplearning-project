@@ -193,6 +193,7 @@ def generate_notes(model, train_x, pitchnames):
 
         index = np.argmax(prediction)
         # index = sample(prediction, 1)
+        # print(index, np.argmax(prediction))
 
         result = int_to_note[index]
         prediction_output.append(result)
@@ -210,10 +211,9 @@ def create_midi(i, prediction_output):
     output_notes.append(instrument.fromString(i))
     for pattern in prediction_output:
         notes = pattern.split("|")[0]
-        # note_duration = round(float(pattern.split("|")[1]), 2)
+        note_duration = round(float(pattern.split("|")[1]), 2)
         note_offset = round(float(pattern.split("|")[2]), 2)
-        offset += note_offset
-        # print(notes, note_duration, note_offset)
+        print(notes, note_duration, note_offset)
         if '.' in notes:
             notes_in_chord = notes.split('.')
             n = []
@@ -222,22 +222,22 @@ def create_midi(i, prediction_output):
                 new_note.storedInstrument = instrument.fromString(i)
                 n.append(new_note)
             new_chord = chord.Chord(n)
-            # new_chord.quarterLength = note_duration
+            new_chord.quarterLength = note_duration
             new_chord.offset = offset
             output_notes.append(new_chord)
         elif notes == 'rest':
             new_note = note.Rest()
-            # new_note.quarterLength = note_duration
+            new_note.quarterLength = note_duration
             new_note.storedInstrument = instrument.fromString(i)
             new_note.offset = offset
             output_notes.append(new_note)
         else:
             new_note = note.Note(notes)
             new_note.storedInstrument = instrument.fromString(i)
-            # new_note.quarterLength = note_duration
+            new_note.quarterLength = note_duration
             new_note.offset = offset
             output_notes.append(new_note)
-
+        offset += offset_adj
     return output_notes
 
 
