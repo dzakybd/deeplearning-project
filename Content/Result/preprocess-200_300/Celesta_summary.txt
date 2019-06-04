@@ -1,6 +1,0 @@
-Instrument: Celesta
-Data size: 5924
-Sequence out data: 5924
-Sequence length: 300
-Number of unique notes: 1986
-Sample unique note: A2|1.0|0.25

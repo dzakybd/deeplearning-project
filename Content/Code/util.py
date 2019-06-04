@@ -15,13 +15,13 @@ from keras.utils import np_utils
 def train_preprocess():
     information = {}
     print('Convert MIDI to notes')
-    instrus = convert_midis_to_notes()
+    all_instrument_notes = convert_midis_to_notes()
 
-    for i in instrus:
+    for i in all_instrument_notes:
 
         print('Create sequences')
         # Create sequences
-        train_x, train_y, pitchnames = create_sequences(instrus[i])
+        train_x, train_y, pitchnames = create_sequences(all_instrument_notes[i])
 
         print('Data reshape')
         # Data reshape
@@ -48,7 +48,7 @@ def train_preprocess():
 
 # Convert midi file dataset to notes
 def convert_midis_to_notes():
-    instrus = {}
+    all_instrument_notes = {}
     used_inst = [
         'Celesta',
         'Bass',
@@ -101,31 +101,17 @@ def convert_midis_to_notes():
                     prev_offset = element.offset
                     # print(temp)
                 if not len(notes) == 0:
-                    if name in instrus.keys():
-                        temp = instrus.get(name)
+                    if name in all_instrument_notes.keys():
+                        temp = all_instrument_notes.get(name)
                         temp.extend(notes)
                     else:
                         temp = notes
-                    instrus[name] = temp
+                    all_instrument_notes[name] = temp
 
-    # new_instrus = {}
-    # top_k = 3
-    #
-    # for i in instrus.keys():
-    #     if len(instrus[i]) < sequence_length:
-    #         instrus[i] = []
-    #
-    # for i in sorted(instrus, key=lambda k: len(instrus[k]), reverse=True):
-    #     top_k -= 1
-    #     new_instrus[i] = instrus[i]
-    #
-    #     if top_k == 0:
-    #         break
+    for i in all_instrument_notes.keys():
+        print("Instrument {} have {} unique notes".format(i, len(all_instrument_notes[i])))
 
-    for i in instrus.keys():
-        print("Instrument {} have {} unique notes".format(i, len(instrus[i])))
-
-    return instrus
+    return all_instrument_notes
 
 
 def create_sequences(notes):
@@ -203,9 +189,11 @@ def generate_notes(model, train_x, pitchnames):
     for note_index in range(sequence_length):
         prediction_input = np.reshape(pattern, (1, len(pattern), 1))
         prediction_input = prediction_input / float(n_vocab)
-        prediction = model.predict(prediction_input, verbose=0)
+        prediction = model.predict(prediction_input, verbose=0)[0]
 
         index = np.argmax(prediction)
+        # index = sample(prediction, 1)
+
         result = int_to_note[index]
         prediction_output.append(result)
 
@@ -215,16 +203,17 @@ def generate_notes(model, train_x, pitchnames):
     return prediction_output
 
 
+# Convert notes to MIDI
 def create_midi(i, prediction_output):
     output_notes = stream.Part()
     offset = 0
     output_notes.append(instrument.fromString(i))
     for pattern in prediction_output:
         notes = pattern.split("|")[0]
-        # duration = round(float(pattern.split("|")[1]), 2)
-        # note_offset = round(float(pattern.split("|")[2]), 2)
-        # duration += offset_adj
-        # print(notes, duration, note_offset)
+        # note_duration = round(float(pattern.split("|")[1]), 2)
+        note_offset = round(float(pattern.split("|")[2]), 2)
+        offset += note_offset
+        # print(notes, note_duration, note_offset)
         if '.' in notes:
             notes_in_chord = notes.split('.')
             n = []
@@ -233,32 +222,43 @@ def create_midi(i, prediction_output):
                 new_note.storedInstrument = instrument.fromString(i)
                 n.append(new_note)
             new_chord = chord.Chord(n)
-            # new_chord.quarterLength = duration
+            # new_chord.quarterLength = note_duration
             new_chord.offset = offset
             output_notes.append(new_chord)
         elif notes == 'rest':
             new_note = note.Rest()
-            # new_note.quarterLength = duration
+            # new_note.quarterLength = note_duration
             new_note.storedInstrument = instrument.fromString(i)
             new_note.offset = offset
             output_notes.append(new_note)
         else:
             new_note = note.Note(notes)
             new_note.storedInstrument = instrument.fromString(i)
-            # new_note.quarterLength = duration
+            # new_note.quarterLength = note_duration
             new_note.offset = offset
             output_notes.append(new_note)
-        offset += offset_adj
 
     return output_notes
 
 
+# Callback for loss logging
 def callback_builder(i):
     callbacks_list = []
     callbacks_list.append(CSVLogger(train_instrument_path(i, 4), separator=','))
     return callbacks_list
 
 
+# Temperature-based event disribution
+def sample(preds, temperature):
+    preds = np.asarray(preds).astype('float64')
+    preds = np.log(preds) / temperature
+    exp_preds = np.exp(preds)
+    preds = exp_preds / np.sum(exp_preds)
+    probas = np.random.multinomial(1, preds, 1)
+    return np.argmax(probas)
+
+
+# Create plot
 def create_plot(i, hist, title):
     xc = range(epochs)
     a = hist.history[title]

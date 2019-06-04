@@ -1,6 +1,0 @@
-Instrument: Bass
-Data size: 5288
-Sequence out data: 5288
-Sequence length: 100
-Number of unique notes: 1598
-Sample unique note: A1|2.0|0.25

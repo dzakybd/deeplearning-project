@@ -1,7 +1,6 @@
 # Default parameter #
-from midi2audio import FluidSynth
 
-reset_preprocess = False
+reset_preprocess = True
 use_bidirectional = False
 rrn_type = 'LSTM'
 depth = 3
@@ -19,11 +18,12 @@ offset_adj = 0.5
 
 # Experiment parameter #
 
-scenario = 8
+scenario = 2
 
 if scenario == 1:
     pass
 elif scenario == 2:
+    reset_preprocess = True
     depth = 2
 elif scenario == 3:
     depth = 1
@@ -37,38 +37,37 @@ elif scenario == 6:
     depth = 1
 elif scenario == 7:
     depth = 1
-    reset_preprocess = True
-    sequence_length = 200
+    unit_size = 512
 elif scenario == 8:
-    reset_preprocess = True
-    sequence_length = 300
     depth = 1
+    unit_size = 1024
 elif scenario == 9:
     rrn_type = 'GRU'
+    depth = 1
+    unit_size = 512
+elif scenario == 10:
+    rrn_type = 'GRU'
+    depth = 1
+    unit_size = 1024
+elif scenario == 11:
+    depth = 1
+    reset_preprocess = True
+    sequence_length = 200
+elif scenario == 12:
+    reset_preprocess = True
+    sequence_length = 300
+    depth = 1
+elif scenario == 13:
+    rrn_type = 'GRU'
     reset_preprocess = True
     sequence_length = 200
     depth = 1
-elif scenario == 10:
+elif scenario == 14:
     rrn_type = 'GRU'
     reset_preprocess = True
     sequence_length = 300
     depth = 1
-elif scenario == 11:
-    depth = 1
-    unit_size = 512
-elif scenario == 12:
-    depth = 1
-    unit_size = 1024
-elif scenario == 13:
-    reset_preprocess = True
-    rrn_type = 'GRU'
-    depth = 1
-    unit_size = 512
-elif scenario == 14:
-    reset_preprocess = True
-    rrn_type = 'GRU'
-    depth = 1
-    unit_size = 1024
+
 
 # Fixed parameter #
 dataset_base = "../Dataset/"

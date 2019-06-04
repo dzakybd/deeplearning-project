@@ -1,0 +1,20 @@
+Project structure:
+    Content: It is source code of the project, it consist of Code, Dataset, and result
+    Code: It consist of code file
+        config.py: it consist of parameter for the project's code
+        util.py: it consist of training and generating callable function
+        train.py: it is code to run preprocessing and training
+        generate.py: it is code to generate Gamelan music
+    Dataset: It consist of Gamelan MIDI dataset
+    Result: It consist of preprocessed notes data, and result of every scenario
+    Report: It is where the report exist
+
+How to train:
+    1. Setting your preferable scenario and also the other parameters in config.py
+    2. Run the train.py code for preprocessing and training process
+    3. Open the result folder to see the trained model and summary
+
+How to test:
+    1. Setting your preferable used scenario's model config.py
+    2. Run the test.py code for generating the music
+    3. Open the test folder inside scenario folder to get the music
