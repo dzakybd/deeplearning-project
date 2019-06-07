@@ -1,0 +1,13 @@
+Instrument: Celesta
+Scenario: 6
+RNN type: GRU
+Depth: 1
+Use regularizer: Yes / Drouput: 0.2/ Weight decay: 0.0001
+
+Epochs: 50
+Batch size: 20
+Optimizer: SGD + momentum + lr 0.01
+Sequence length 100
+RNN units: 256
+
+Time interval: 111.10399746894836

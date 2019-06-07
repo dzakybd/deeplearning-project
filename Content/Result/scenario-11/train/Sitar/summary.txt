@@ -1,0 +1,13 @@
+Instrument: Sitar
+Scenario: 11
+RNN type: LSTM
+Depth: 1
+Use regularizer: Yes / Drouput: 0.2/ Weight decay: 0.0001
+
+Epochs: 50
+Batch size: 20
+Optimizer: SGD + momentum + lr 0.01
+Sequence length 100
+RNN units: 512
+
+Time interval: 54.956769704818726

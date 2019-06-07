@@ -1,0 +1,13 @@
+Instrument: Bass
+Scenario: 16
+RNN type: GRU
+Depth: 2
+Use regularizer: Yes / Drouput: 0.2/ Weight decay: 0.0001
+
+Epochs: 50
+Batch size: 20
+Optimizer: SGD + momentum + lr 0.01
+Sequence length 300
+RNN units: 512
+
+Time interval: 1009.9918963909149
